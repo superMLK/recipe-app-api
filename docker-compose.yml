@@ -1,0 +1,13 @@
+# 定義服務
+services:
+  app:
+    build:
+      context: . # Dockerfile 所在目錄
+      args:
+        - DEV=true # 開啟開發模式
+    ports:
+      - "8000:8000" # 映射主機的 8000 端口到容器的 8000 端口
+    volumes:
+      - ./app:/app # 將本地的 app 目錄掛載到容器的 /app 目錄
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
