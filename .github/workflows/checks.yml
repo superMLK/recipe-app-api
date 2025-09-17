@@ -1,0 +1,21 @@
+---
+name: Checks # 名稱
+
+on: [push] # 觸發條件 (推送代碼時)
+
+jobs: # 工作流程
+  test-lint: # 工作名稱 (可自定義)
+    name: Test and Lint # 工作顯示名稱 (可自定義)
+    runs-on: ubuntu-24.04 # 運行環境 (Ubuntu 24.04)
+    steps: # 工作步驟 (按順序執行 Login to Docker Hub -> Checkout -> Test -> Lint)
+      - name: Login to Docker Hub # 步驟名稱 (可自定義)
+        uses: docker/login-action@v3 # 使用 Docker 登錄動作
+        with: # 登錄參數
+          username: ${{ secrets.DOCKERHUB_USER }} # Docker Hub 用戶名 (從 GitHub Secrets 獲取)
+          password: ${{ secrets.DOCKERHUB_TOKEN }} # Docker Hub 密碼 (從 GitHub Secrets 獲取)
+      - name: Checkout # 步驟名稱 (可自定義)
+        uses: actions/checkout@v4 # 使用檢出動作 (檢出代碼庫)
+      - name: Test # 步驟名稱 (可自定義)
+        run: docker compose run --rm app sh -c "python manage.py test" # 運行測試命令
+      - name: Lint # 步驟名稱 (可自定義)
+        run: docker compose run --rm app sh -c "flake8" # 運行代碼檢查命令
