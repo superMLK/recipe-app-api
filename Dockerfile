@@ -22,6 +22,13 @@ EXPOSE 8000
 ARG DEV=false
 
 # 安裝系統依賴，建立Python虛擬環境，安裝Python套件，並建立一個非root使用者來執行應用程式
+# 以下程式碼分別做了什麼：
+# 1. 安裝必要的系統套件，如gcc、musl-dev等，這些是編譯某些Python套件所需的
+# 2. 建立Python虛擬環境，確保應用程式的依賴不會與系統的Python環境衝突
+# 3. 使用pip安裝requirements.txt中的套件
+# 4. 如果是開發環境，則額外安裝requirements.dev.txt中的套件
+# 5. 刪除/tmp目錄以節省空間
+# 6. 建立一個名為django-user的非root使用者，提升安全性
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     /py/bin/pip install -r /tmp/requirements.txt && \
